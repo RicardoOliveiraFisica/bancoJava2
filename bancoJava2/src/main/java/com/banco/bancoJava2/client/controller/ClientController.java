@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.banco.bancoJava2.dto.ClientDTO;
 import com.banco.bancoJava2.entity.Client;
+import com.banco.bancoJava2.exception.ClientNotFoundException;
+import com.banco.bancoJava2.exception.CpfAlreadyRegistered;
 import com.banco.bancoJava2.service.ClientService;
 
 @CrossOrigin("*")
@@ -32,7 +34,7 @@ public class ClientController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ClientDTO registerClient(@Valid @RequestBody ClientDTO clientDTO) {
+	public ClientDTO registerClient(@Valid @RequestBody ClientDTO clientDTO) throws CpfAlreadyRegistered {
 		Client client = ClientDTO.returnClient(clientDTO);
 		Client clientSaved = this.clientService.registerClient(client);
 		ClientDTO clientDTOsaved = ClientDTO.returnClientDTO(clientSaved);
@@ -45,7 +47,7 @@ public class ClientController {
 	}
 	
 	@GetMapping("{cpf}")
-	public ClientDTO getClient(@PathVariable String cpf) {
+	public ClientDTO getClient(@PathVariable String cpf) throws ClientNotFoundException {
 		Client client = this.clientService.getClient(cpf);
 		ClientDTO clientDTO = ClientDTO.returnClientDTO(client);
 		return clientDTO;

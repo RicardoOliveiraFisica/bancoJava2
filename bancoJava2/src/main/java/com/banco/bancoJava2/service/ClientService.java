@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.banco.bancoJava2.entity.Client;
+import com.banco.bancoJava2.exception.ClientNotFoundException;
+import com.banco.bancoJava2.exception.CpfAlreadyRegistered;
 import com.banco.bancoJava2.repository.ClientRepository;
 
 @Service
@@ -17,8 +19,11 @@ public class ClientService {
 		this.clientRepository = clientRepository;
 	}
 
-	public Client registerClient(Client client) {
-		return this.clientRepository.save(client);
+	public Client registerClient(Client client) throws CpfAlreadyRegistered {
+		if (!this.clientRepository.existsByCpf(client.getCpf())) {
+			return this.clientRepository.save(client);
+		}
+		throw new CpfAlreadyRegistered(client.getCpf());
 	}
 	
 	public List<Client> returnAllClients() {
@@ -26,7 +31,10 @@ public class ClientService {
 		return clients;
 	}
 	
-	public Client getClient(String cpf) {
-		return this.clientRepository.findByCpf(cpf);
+	public Client getClient(String cpf) throws ClientNotFoundException {
+		if (this.clientRepository.existsByCpf(cpf)) {
+			return this.clientRepository.findByCpf(cpf);
+		}
+		throw new ClientNotFoundException(cpf);
 	}
 }
