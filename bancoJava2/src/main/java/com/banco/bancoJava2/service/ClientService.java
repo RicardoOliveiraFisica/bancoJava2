@@ -25,4 +25,8 @@ public class ClientService {
 		List<Client> clients = this.clientRepository.findAll();		
 		return clients;
 	}
+	
+	public Client getClient(String cpf) {
+		return this.clientRepository.findByCpf(cpf);
+	}
 }
