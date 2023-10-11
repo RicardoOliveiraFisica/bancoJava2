@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.banco.bancoJava2.dto.ClientDTO;
 import com.banco.bancoJava2.entity.Client;
 import com.banco.bancoJava2.service.ClientService;
 
@@ -30,8 +31,11 @@ public class ClientController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Client registerClient(@Valid @RequestBody Client client) {
-		return this.clientService.registerClient(client);
+	public ClientDTO registerClient(@Valid @RequestBody ClientDTO clientDTO) {
+		Client client = ClientDTO.returnClient(clientDTO);
+		Client clientSaved = this.clientService.registerClient(client);
+		ClientDTO clientDTOsaved = ClientDTO.returnClientDTO(clientSaved);
+		return clientDTOsaved;
 	}
 	
 	@GetMapping
