@@ -1,6 +1,8 @@
 package com.banco.bancoJava2.dto;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.banco.bancoJava2.entity.Address;
 import com.banco.bancoJava2.entity.Client;
@@ -45,6 +47,13 @@ public class ClientDTO {
 		return clientDTO;
 	}
 	
-	
+	public static List<ClientDTO> listClientsDTO(List<Client> clients) {
+		List<ClientDTO> clientsDTO = new ArrayList<>();
+		for (Client client : clients) {
+			ClientDTO clientDTO = ClientDTO.returnClientDTO(client);
+			clientsDTO.add(clientDTO);
+		}
+		return clientsDTO;
+	}
 	
 }
