@@ -73,4 +73,8 @@ public class Client {
 		this.rendimentoMensal = rendimentoMensal;
 	}
 	
+	public boolean isEmpty() {
+		return this.isEmpty();
+	}
+	
 }
