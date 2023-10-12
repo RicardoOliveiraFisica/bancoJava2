@@ -2,6 +2,8 @@ package com.banco.bancoJava2.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,9 +34,29 @@ public class ClientService {
 	}
 	
 	public Client getClient(String cpf) throws ClientNotFoundException {
-		if (this.clientRepository.existsByCpf(cpf)) {
-			return this.clientRepository.findByCpf(cpf);
+		Client client = this.clientRepository.findByCpf(cpf);
+		if (!client.isEmpty()) {
+			return client;
 		}
 		throw new ClientNotFoundException(cpf);
+	}
+	
+	public Client updateClient(String cpf, Client client) throws ClientNotFoundException {
+		client.setCpf(cpf); //garantir que o cpf seja o mesmo
+		if (this.clientRepository.existsByCpf(cpf)) {
+			return this.clientRepository.save(client);
+		}
+		throw new ClientNotFoundException(cpf);
+	}
+	
+	@Transactional
+	public SuccessMessage deleteClient(String cpf) throws ClientNotFoundException {
+		if (this.clientRepository.existsByCpf(cpf)) {
+			this.clientRepository.deleteByCpf(cpf);
+			SuccessMessage successMessage = new SuccessMessage("Cadastro deletado com sucesso");
+			return successMessage;
+		}
+		throw new ClientNotFoundException(cpf);
+		
 	}
 }
