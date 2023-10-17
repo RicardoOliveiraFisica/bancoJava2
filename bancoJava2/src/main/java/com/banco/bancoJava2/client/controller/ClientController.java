@@ -70,4 +70,6 @@ public class ClientController {
 	public SuccessMessage deleteClient(@PathVariable String cpf) throws ClientNotFoundException {
 		return this.clientService.deleteClient(cpf);
 	}
+	
+	///necessario estudar aqui a questao da propagacao do efeito delete e update (com o objeto endereco)
 }
